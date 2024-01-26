@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.search.databinding.FragmentSearchBinding
 
 private const val ARG_PARAM1 = "param1"
@@ -29,6 +31,14 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(binding){
+            RecyclerView.LayoutManager = GridLayoutManager(requireContext(), 2)
+        }
     }
 
     companion object {
