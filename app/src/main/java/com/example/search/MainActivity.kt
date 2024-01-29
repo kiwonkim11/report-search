@@ -16,9 +16,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initViewPager()
+        saveData()
+        loadData()
+
+        binding.btnSearch.setOnClickListener {
+            val dataToSend = binding.etSearch.text.toString()
+            val fragment = SearchFragment.newInstance(dataToSend)
+        }
 
     }
+    private fun saveData() {
+        val pref = getSharedPreferences("pref", 0)
+        val edit = pref.edit()
+        edit.putString("name", binding.etSearch.text.toString())
+        edit.apply()
+    }
 
+    private fun loadData() {
+        val pref = getSharedPreferences("pref", 0)
+        binding.etSearch.setText(pref.getString("name",""))
+    }
     private fun initViewPager() {
         binding.viewpager2.adapter = ViewPagerAdapter(this)
         TabLayoutMediator(binding.tab, binding.viewpager2) { tab, pos ->
