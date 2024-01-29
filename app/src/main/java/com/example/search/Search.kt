@@ -1,22 +1,21 @@
 package com.example.search
 
 import com.google.gson.annotations.SerializedName
-import java.time.DateTimeException
 
 data class Search(
     @SerializedName("meta")
-    val searchMeta: SearchMeta,
+    val meta: Meta,
     @SerializedName("documents")
-    val searchDocuments: SearchDocuments
+    val documents: MutableList<Document>?
 )
 
-data class SearchMeta (
+data class Meta (
     val total_count: Int,
     val papageable_count: Int,
     val is_end: Boolean
 )
 
-data class SearchDocuments (
+data class Document (
     val collection: String,
     val thumbnail_url: String,
     val image_url: String,
@@ -24,5 +23,5 @@ data class SearchDocuments (
     val height: Int,
     val display_sitename: String,
     val doc_url: String,
-    val datetime: Datetime
+    val datetime: String
 )
