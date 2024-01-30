@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.search.databinding.ItemBinding
 
 class SearchAdapter(private val mItems: MutableList<Document>): RecyclerView.Adapter<SearchAdapter.Holder>() {
@@ -25,7 +26,9 @@ class SearchAdapter(private val mItems: MutableList<Document>): RecyclerView.Ada
             itemClick?.onClick(it, position)
         }
 
-        holder.itemImage.setImageResource(mItems[position].thumbnail_url.toInt())
+        Glide.with(holder.itemView.context)
+            .load(mItems[position].thumbnail_url)
+            .into(holder.itemImage)
         holder.itemTitle.text = mItems[position].display_sitename
         holder.itemDate.text = mItems[position].datetime
     }

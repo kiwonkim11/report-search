@@ -16,14 +16,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initViewPager()
-        saveData()
-        loadData()
 
         binding.btnSearch.setOnClickListener {
+            saveData()
             val dataToSend = binding.etSearch.text.toString()
             val fragment = SearchFragment.newInstance(dataToSend)
         }
 
+        loadData()
     }
     private fun saveData() {
         val pref = getSharedPreferences("pref", 0)
