@@ -11,6 +11,6 @@ interface NetworkInterface {
     fun getSearchResult(
         @Header("Authorization: KakaoAK ${REST_API_KEY}")
         @Query("query") query: String,
-        @Query("size") size: Int = 80
+        @Query("size") size: Int
     ): Call<Search>
 }

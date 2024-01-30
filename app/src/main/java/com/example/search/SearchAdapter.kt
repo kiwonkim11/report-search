@@ -31,6 +31,7 @@ class SearchAdapter(private val mItems: MutableList<Document>): RecyclerView.Ada
         Glide.with(holder.itemView.context)
             .load(mItems[position].thumbnail_url)
             .into(holder.itemImage)
+
         holder.itemTitle.text = mItems[position].display_sitename
 
         // 시간 포맷 설정

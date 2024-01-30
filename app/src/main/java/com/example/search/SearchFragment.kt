@@ -43,7 +43,7 @@ class SearchFragment : Fragment() {
 
             btnSearch.setOnClickListener {
                 val keyword = etSearch.text.toString()
-                callKakaoKeyword(keyword)
+                callKakaoKeyword(keyword, size = 80)
                 hideKeyboard()
                 saveData()
                 loadData()
@@ -52,8 +52,8 @@ class SearchFragment : Fragment() {
 
     }
 
-    private fun callKakaoKeyword(keyword: String) {
-        NetworkClient.searchNetwork.getSearchResult(query = keyword)
+    private fun callKakaoKeyword(keyword: String, size: Int) {
+        NetworkClient.searchNetwork.getSearchResult(query = keyword, size = size)
             .enqueue(object : Callback<Search> {
                 override fun onResponse(call: Call<Search>, response: Response<Search>) {
                     val body = response.body()
