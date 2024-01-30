@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.search.databinding.ItemBinding
+import java.text.SimpleDateFormat
 
 class SearchAdapter(private val mItems: MutableList<Document>): RecyclerView.Adapter<SearchAdapter.Holder>() {
 
@@ -26,11 +27,16 @@ class SearchAdapter(private val mItems: MutableList<Document>): RecyclerView.Ada
             itemClick?.onClick(it, position)
         }
 
+        //Glide를 통한 Image URI 형식 받기
         Glide.with(holder.itemView.context)
             .load(mItems[position].thumbnail_url)
             .into(holder.itemImage)
         holder.itemTitle.text = mItems[position].display_sitename
-        holder.itemDate.text = mItems[position].datetime
+
+        // 시간 포맷 설정
+        val mFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val time = mFormat.format(mItems[position].datetime)
+        holder.itemDate.text = time
     }
 
     override fun getItemId(position: Int): Long {
