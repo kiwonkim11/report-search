@@ -57,10 +57,10 @@ class SearchFragment : Fragment() {
                 val keyword = etSearch.text.toString()
                 callKeyword(keyword)
                 hideKeyboard()
+                saveData()
+                loadData()
             }
 
-            saveData()
-            loadData()
         }
 
     }
@@ -92,19 +92,19 @@ class SearchFragment : Fragment() {
     }
 
     private fun saveData() {
-        val pref = requireActivity().pref
-        val edit = pref?.edit()
-        edit?.putString("name", binding.etSearch.text.toString())
-        edit?.apply()
+        val pref = requireActivity().getSharedPreferences("pref", Context.MODE_PRIVATE)
+        val edit = pref.edit()
+        edit.putString("name", binding.etSearch.text.toString())
+        edit.apply()
     }
 
     private fun loadData() {
-        val pref = this.activity?.getSharedPreferences("pref", Context.MODE_PRIVATE)
-        binding.etSearch.setText(pref?.getString("name", ""))
+        val pref = requireActivity().getSharedPreferences("pref", Context.MODE_PRIVATE)
+        binding.etSearch.setText(pref.getString("name", ""))
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
