@@ -1,5 +1,6 @@
 package com.example.search
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -37,29 +38,31 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            val adapter = SearchAdapter(items)
+            adapter = SearchAdapter(items)
             recyclerview.adapter = adapter
             recyclerview.layoutManager = GridLayoutManager(context, 2)
 
             btnSearch.setOnClickListener {
                 val keyword = etSearch.text.toString()
-                callKakaoKeyword(keyword, size = 80)
+                callKeyword(keyword)
                 hideKeyboard()
-                saveData()
-                loadData()
             }
+
+            saveData()
+            loadData()
         }
 
     }
 
-    private fun callKakaoKeyword(keyword: String, size: Int) {
-        NetworkClient.searchNetwork.getSearchResult(query = keyword, size = size)
+    private fun callKeyword(keyword: String) {
+        NetworkClient.searchApi.getSearchResult("KakaoAK $REST_API_KEY", query = keyword)
             .enqueue(object : Callback<Search> {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onResponse(call: Call<Search>, response: Response<Search>) {
                     val body = response.body()
 
                     body?.let {
-                        items.addAll(it.documents!!)
+                        items.addAll(it.documents)
                     }
                     adapter.notifyDataSetChanged()
                     Log.d("api검사", "$items")

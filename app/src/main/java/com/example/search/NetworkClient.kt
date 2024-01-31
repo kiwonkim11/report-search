@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkClient {
 
-    private const val BASE_URL = "https://dapi.kakao.com/v2/search/image"
+    private const val BASE_URL = "https://dapi.kakao.com"
 
     private fun createOkHttpClient() : OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
@@ -28,12 +28,12 @@ object NetworkClient {
             .build()
     }
 
-    val searchRetrofit = Retrofit.Builder()
+    private val searchRetrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .client(createOkHttpClient())
         .build()
 
-    val searchNetwork: NetworkInterface = searchRetrofit.create(NetworkInterface::class.java)
+    val searchApi: NetworkInterface = searchRetrofit.create(NetworkInterface::class.java)
 
 }
