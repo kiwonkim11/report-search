@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +44,15 @@ class SearchFragment : Fragment() {
             recyclerview.adapter = adapter
             recyclerview.layoutManager = GridLayoutManager(context, 2)
 
+            etSearch.setOnKeyListener { v, keyCode, event ->
+                if (event.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
+                    val keyword = etSearch.text.toString()
+                    callKeyword(keyword)
+                    hideKeyboard()
+                    true
+                } else false
+            }
+
             btnSearch.setOnClickListener {
                 val keyword = etSearch.text.toString()
                 callKeyword(keyword)
@@ -75,20 +86,21 @@ class SearchFragment : Fragment() {
     }
 
     private fun hideKeyboard() {
-        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(view?.windowToken,0)
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
     private fun saveData() {
-        val pref = requireActivity().getSharedPreferences("pref", 0)
-        val edit = pref.edit()
-        edit.putString("name", binding.etSearch.text.toString())
-        edit.apply()
+        val pref = requireActivity().pref
+        val edit = pref?.edit()
+        edit?.putString("name", binding.etSearch.text.toString())
+        edit?.apply()
     }
 
     private fun loadData() {
-        val pref = requireActivity().getSharedPreferences("pref", 0)
-        binding.etSearch.setText(pref.getString("name", ""))
+        val pref = this.activity?.getSharedPreferences("pref", Context.MODE_PRIVATE)
+        binding.etSearch.setText(pref?.getString("name", ""))
     }
 
     override fun onDestroy() {
