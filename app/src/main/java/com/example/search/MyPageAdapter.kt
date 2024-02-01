@@ -11,24 +11,18 @@ import com.example.search.databinding.ItemBinding
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
-class SearchAdapter(private val mContext: Context): RecyclerView.Adapter<SearchAdapter.Holder>() {
+class MyPageAdapter(var mContext: Context) : RecyclerView.Adapter<MyPageAdapter.Holder>() {
 
     var items = ArrayList<SearchItem>()
 
-    fun clearItem() {
-        items.clear()
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = ItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return Holder(binding)
     }
-
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(holder: MyPageAdapter.Holder, position: Int) {
 
         //Glide를 통한 Image URI 형식 받기
-        Glide.with(holder.itemView.context)
+        Glide.with(mContext)
             .load(items[position].url)
             .into(holder.itemImage)
 
@@ -38,14 +32,12 @@ class SearchAdapter(private val mContext: Context): RecyclerView.Adapter<SearchA
         holder.itemDate.text = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(
             OffsetDateTime.parse(items[position].dateTime))
 
-        holder.itemLike.visibility = if(items[position].isLike) View.VISIBLE else View.INVISIBLE
+        holder.itemLike.visibility = View.GONE
     }
-
     override fun getItemCount(): Int {
         return items.size
     }
-
-    inner class Holder(binding: ItemBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    inner class Holder (binding: ItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val itemImage = binding.searchImage
         val itemTitle = binding.searchTitle
         val itemDate = binding.searchDate
@@ -54,22 +46,14 @@ class SearchAdapter(private val mContext: Context): RecyclerView.Adapter<SearchA
 
         init {
             itemLike.visibility = View.GONE
-            itemImage.setOnClickListener(this)
-            clItem.setOnClickListener(this)
-        }
-        override fun onClick(v: View?) {
-            val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return
-            val item = items[position]
 
-            item.isLike = !item.isLike
-
-            if (item.isLike) {
-                (mContext as MainActivity).addLikedItems(item)
-            } else {
-                (mContext as MainActivity).removeLikedItems(item)
+            clItem.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    items.removeAt(position)
+                    notifyItemRemoved(position)
+                }
             }
-
-            notifyItemChanged(position)
         }
     }
 }

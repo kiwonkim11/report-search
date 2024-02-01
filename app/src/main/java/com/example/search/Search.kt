@@ -12,5 +12,6 @@ data class Document (
     val thumbnailUrl: String,
     @SerializedName("display_sitename")
     val siteName: String,
+    @SerializedName("datetime")
     val datetime: String
 )
